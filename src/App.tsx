@@ -15,6 +15,8 @@ import ToolsSideNav from "./components/ui/ToolsSideBar";
 import ColorMap from "./components/ui/ColorMap";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import InfoSideNav from "./components/ui/InfoSideBar";
+import PreLoader from "./components/ui/preLoader";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function App() {
   const planetContext = useContext(PlanetContext);
@@ -47,61 +49,75 @@ export default function App() {
   };
 
   return (
-    <div className="relative h-screen w-screen z-0 overflow-hidden">
-      <Header
-        onToolsClick={toggleToolBarSideBar}
-        onInfoClick={toggleInfoBarSideBar}
-        setView={setView}
-        view={view}
-        resetCamera={resetCamera}
-        onChartsClick={toggleChartNav}
-      />
-      <ToolsSideNav
-        isOpen={isToolSideBarOpen}
-        toggleSideNav={toggleToolBarSideBar}
-      />
-      <InfoSideNav
-        isOpen={isInfoSideBarOpen}
-        toggleSideNav={toggleInfoBarSideBar}
-      />
-      <ChartSideNav
-        isOpen={isChartNavOpen}
-        toggleSideNav={toggleChartNav}
-        data={planetContext?.planets}
-      />
-      <ColorMap />
-      {planetContext?.isLoading ? (
-        <div className="flex h-full w-full items-center justify-center text-white">
-          <p>Loading...</p>
-        </div>
-      ) : (
-        <Canvas gl={{ antialias: false }}>
-          {/* <Perf position="bottom-right" /> */}
-          <PerspectiveCamera
-            ref={cameraRef}
-            makeDefault
-            position={[1.5, 0.12, 0.2]}
-            near={0.001} // Reduce this value to be closer to objects
-            far={1000} // Increase this value if objects are farther away
-          />
-          <OrbitControls
-            ref={controlsRef}
-            zoomSpeed={view === "galaxy" ? 0.09 : 0.5}
-            panSpeed={view === "galaxy" ? 0.08 : 0.5}
-            rotateSpeed={view === "galaxy" ? 0.02 : 0.09}
-            target={viewPosition}
-          />
-          <SceneBackground texturePath="/images/background/stars_8k.webp" />
-          <Scene
-            numStars={NUMBER_OF_STARS}
-            exoPlanets={planetContext?.planets}
-            setViewPosition={setViewPosition}
-            view={view}
-            cameraRef={cameraRef}
-            controlsRef={controlsRef}
-          />
-        </Canvas>
-      )}
+    <div className=" relative">
+      <AnimatePresence>
+        {planetContext?.isLoading || planetContext?.loadingPlanets ? (
+          <motion.div
+            className="absolute inset-0 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <PreLoader />
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+      <div className={`relative h-screen w-screen z-0 overflow-hidden`}>
+        <Header
+          onToolsClick={toggleToolBarSideBar}
+          onInfoClick={toggleInfoBarSideBar}
+          setView={setView}
+          view={view}
+          resetCamera={resetCamera}
+          onChartsClick={toggleChartNav}
+        />
+        <ToolsSideNav
+          isOpen={isToolSideBarOpen}
+          toggleSideNav={toggleToolBarSideBar}
+        />
+        <InfoSideNav
+          isOpen={isInfoSideBarOpen}
+          toggleSideNav={toggleInfoBarSideBar}
+        />
+        <ChartSideNav
+          isOpen={isChartNavOpen}
+          toggleSideNav={toggleChartNav}
+          data={planetContext?.planets}
+        />
+        <ColorMap />
+        {planetContext?.isLoading ? (
+          <div className="flex h-full w-full items-center justify-center text-white">
+            <p>Loading...</p>
+          </div>
+        ) : (
+          <Canvas gl={{ antialias: false }}>
+            {/* <Perf position="bottom-right" /> */}
+            <PerspectiveCamera
+              ref={cameraRef}
+              makeDefault
+              position={[1.5, 0.12, 0.2]}
+              near={0.001} // Reduce this value to be closer to objects
+              far={1000} // Increase this value if objects are farther away
+            />
+            <OrbitControls
+              ref={controlsRef}
+              zoomSpeed={view === "galaxy" ? 0.09 : 0.5}
+              panSpeed={view === "galaxy" ? 0.08 : 0.5}
+              rotateSpeed={view === "galaxy" ? 0.02 : 0.09}
+              target={viewPosition}
+            />
+            <SceneBackground texturePath="/images/background/stars_8k.webp" />
+            <Scene
+              numStars={NUMBER_OF_STARS}
+              exoPlanets={planetContext?.planets}
+              setViewPosition={setViewPosition}
+              view={view}
+              cameraRef={cameraRef}
+              controlsRef={controlsRef}
+            />
+          </Canvas>
+        )}
+      </div>
     </div>
   );
 }

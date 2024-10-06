@@ -12,6 +12,7 @@ const PlanetContextProvider = ({ children }: Props) => {
   const [isCleanData, setIsCleanData] = useState<boolean>(true);
 
   const { exoPlanets, isLoading } = useFetchExoPlanets();
+  const [loadingPlanets, setLoadingPlanets] = useState<boolean>(true);
 
   useEffect(() => {
     if (exoPlanets.length > 0) {
@@ -42,8 +43,10 @@ const PlanetContextProvider = ({ children }: Props) => {
       isLoading,
       isCleanData,
       setIsCleanData,
+      loadingPlanets,
+      setLoadingPlanets,
     }),
-    [planets, isLoading]
+    [planets, isLoading, isCleanData, loadingPlanets]
   );
 
   return (
