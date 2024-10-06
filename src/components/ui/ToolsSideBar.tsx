@@ -1,5 +1,5 @@
 import { useContext } from "react";
-// import RangeItem from "./RangeItem";
+import RangeItem from "./RangeItem";
 import ToolContext from "../../context/tools/ToolContext";
 import TwoThumbsRangeItem from "./ReactDoubleRangeItem";
 import MinMaxType from "../../types/MinMaxType";
@@ -14,13 +14,13 @@ export default function ToolsSideNav({ isOpen, toggleSideNav }: Props) {
   const toolContext = useContext(ToolContext);
   const planetContext = useContext(PlanetContext);
 
-  // const handleTeleDiameterSliderChange = (value: number) => {
-  //   toolContext?.setTelescopeDiameter(value);
-  // };
+  const handleTeleDiameterSliderChange = (value: number) => {
+    toolContext?.setTelescopeDiameter(value);
+  };
 
-  // const handleSnr0 = (value: number) => {
-  //   toolContext?.setSnr0(value);
-  // };
+  const handleSnr0 = (value: number) => {
+    toolContext?.setSnr0(value);
+  };
 
   const handleOrbitalDistance = (value: MinMaxType) => {
     toolContext?.setOrbitalDistance(value);
@@ -93,22 +93,22 @@ export default function ToolsSideNav({ isOpen, toggleSideNav }: Props) {
         </label>
       </div>
 
-      {/* <RangeItem
+      <RangeItem
         label="HWO Telescope Diameter (m) :"
         min={0}
         max={50}
         id="td"
         onChange={handleTeleDiameterSliderChange}
         defaultValue={toolContext?.telescopeDiameter}
-      /> */}
-      {/* <RangeItem
+      />
+      <RangeItem
         label="SNR0 :"
         min={0}
         max={500}
         id="snr0"
         onChange={handleSnr0}
         defaultValue={toolContext?.snr0}
-      /> */}
+      />
       <TwoThumbsRangeItem
         rtl={false}
         min={0}

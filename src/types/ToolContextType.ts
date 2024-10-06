@@ -2,9 +2,9 @@ import MinMaxType from "./MinMaxType";
 
 type ToolContextType = {
   telescopeDiameter: number;
-  //setTelescopeDiameter: (value: number) => void;
+  setTelescopeDiameter: (value: number) => void;
   snr0: number;
-  //setSnr0: (value: number) => void;
+  setSnr0: (value: number) => void;
   systemDistance: MinMaxType | undefined;
   setSystemDistance: (value: MinMaxType | undefined) => void;
   orbitalDistance: MinMaxType | undefined;
