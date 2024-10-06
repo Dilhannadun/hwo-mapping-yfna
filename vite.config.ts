@@ -13,6 +13,9 @@ export default defineConfig({
   worker: {
     format: "es", // Use ES modules for workers
   },
+  optimizeDeps: {
+    exclude: ['framer-motion']
+  },
   build: {
     target: "esnext",
     outDir: "dist",

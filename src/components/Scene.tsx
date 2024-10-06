@@ -18,6 +18,7 @@ import { getPlanetColorBySNR } from "../lib/exo-planet-color-filter";
 import gsap from "gsap";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { isExoplanetWithinHabitableZone } from "../lib/habitability-calculation";
+import PlanetContext from "../context/planets/PlanetContext";
 
 // Determine if the current mode is development
 const isDevelopment = import.meta.env.MODE === "development";
@@ -52,6 +53,7 @@ function Scene({
   controlsRef,
 }: Props) {
   const toolContext = useContext(ToolContext);
+  const planetContext = useContext(PlanetContext);
   const gl = useThree((state) => state.gl);
   const groupRef = useRef<THREE.Group>(null);
   const blackHoleRef = useRef<THREE.Mesh>(null);
@@ -83,6 +85,9 @@ function Scene({
         z: targetPosition.z + cameraOffset.z,
         duration: 6, // Increase duration for smoother animation
         ease: "power1.inOut", // Use a smoother easing function
+        onStart: () => {
+          planetContext.setLoadingPlanets(false);
+        },
         onUpdate: () => {
           if (cameraRef.current) setViewPosition(cameraRef.current.position);
         },
@@ -103,7 +108,7 @@ function Scene({
         ease: "power1.inOut",
       });
     }
-  }, [view, setViewPosition, earthRef, blackHoleRef, cameraRef, controlsRef]);
+  }, [view, setViewPosition, earthRef, blackHoleRef, cameraRef, controlsRef, planetContext]);
 
   // Set the pixel ratio for better scaling
   useLayoutEffect(() => {
